@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" >
+
+<!-- KEREKPAR -->
+<xs:simpleType name="tipus_t">
+    <xs:restriction base="xs:string">
+        <xs:enumeration value="orszaguti"></xs:enumeration>
+        <xs:enumeration value="bmx"></xs:enumeration>
+        <xs:enumeration value="mountain"></xs:enumeration>
+        <xs:enumeration value="varosi"></xs:enumeration>
+    </xs:restriction>
+</xs:simpleType>    
+
+ 
+<xs:simpleType name="fek_t">
+    <xs:restriction base="xs:string">
+        <xs:enumeration value="v"></xs:enumeration>
+        <xs:enumeration value="tarcsa"></xs:enumeration>
+        <xs:enumeration value="cantilever"></xs:enumeration>
+        <xs:enumeration value="kontra"></xs:enumeration>
+    </xs:restriction>
+</xs:simpleType>
+  
+<xs:complexType name="kerekpar_t">
+    <xs:sequence>
+        <xs:element name="tipus" type="tipus_t"></xs:element>
+        <xs:element name="kerekMeret" type="xs:int"></xs:element>
+        <xs:element name="fek" type="fek_t"></xs:element>
+    </xs:sequence>
+    <xs:attribute name="tulaj"></xs:attribute>
+</xs:complexType>
+
+<!-- BICIKLIS -->
+<xs:simpleType name="eletkor_t">
+    <xs:restriction base="xs:int" >
+        <xs:minInclusive value="0"/>
+        <xs:maxInclusive value="140"/>
+    </xs:restriction>
+</xs:simpleType>
+    
+<xs:complexType name="biciklis_t">
+    <xs:sequence>
+        <xs:element name="nev">
+            <xs:complexType>
+                <xs:sequence>
+                    <xs:element name="vezetek" type="xs:string"></xs:element>
+                    <xs:element name="kereszt" type="xs:string"></xs:element>
+                </xs:sequence>
+            </xs:complexType>
+        </xs:element>
+        <xs:element name="eletkor" type="eletkor_t"></xs:element>
+        <xs:element name="lakcim">
+            <xs:complexType>
+                <xs:sequence>
+                    <xs:element name="varos" type="xs:string"></xs:element>
+                    <xs:element name="utca" type="xs:string"></xs:element>
+                    <xs:element name="hazszam" type="xs:int"></xs:element>
+                </xs:sequence>
+            </xs:complexType>
+        </xs:element>
+    </xs:sequence> 
+    <xs:attribute name="biciklisId" type="xs:string" use="required"></xs:attribute>
+</xs:complexType>
+
+<!-- UTVONAL -->
+<xs:simpleType name="mertekegyseg_t">
+    <xs:restriction base="xs:string">
+        <xs:enumeration value="m"></xs:enumeration>
+        <xs:enumeration value="km"></xs:enumeration>
+    </xs:restriction>
+</xs:simpleType>
+    
+<xs:complexType name="tav_t">
+    <xs:simpleContent>
+        <xs:extension base="xs:int">
+            <xs:attribute name="mertekegyseg" type="mertekegyseg_t"/>
+        </xs:extension>
+    </xs:simpleContent>
+</xs:complexType>    
+    
+<xs:complexType name="utvonal_t">
+    <xs:sequence>
+        <xs:element name="tav" type="tav_t"></xs:element>
+        <xs:element name="idotartam" type="xs:time"></xs:element>
+        <xs:element name="leiras" type="xs:string" maxOccurs="unbounded"></xs:element>
+    </xs:sequence>
+    <xs:attribute name="utId" type="xs:string" use="required"></xs:attribute>
+    <xs:attribute name="sportolo" type="xs:string" use="required"></xs:attribute>
+</xs:complexType>
+
+<!-- ROOT -->
+<xs:complexType name="verzio_t">
+    <xs:attribute name="verzioszam" type="xs:decimal"></xs:attribute>
+</xs:complexType>
+    
+<xs:complexType name="nyilvantartas_t">
+    <xs:sequence>
+        <xs:element name="verzio" type="verzio_t"></xs:element>
+        <xs:element name="kerekparok">
+            <xs:complexType>
+                <xs:sequence>
+                    <xs:element name="kerekpar" type="kerekpar_t" maxOccurs="unbounded"></xs:element>
+                </xs:sequence>
+            </xs:complexType>
+        </xs:element>
+        <xs:element name="biciklisek">
+            <xs:complexType>
+                <xs:sequence>
+                    <xs:element name="biciklis" type="biciklis_t" maxOccurs="unbounded"></xs:element>
+                </xs:sequence>
+            </xs:complexType>
+        </xs:element>
+        <xs:element name="utvonalak">
+            <xs:complexType>
+                <xs:sequence>
+                    <xs:element name="utvonal" type="utvonal_t" maxOccurs="unbounded"></xs:element>
+                </xs:sequence>
+            </xs:complexType>
+        </xs:element>
+    </xs:sequence>
+</xs:complexType>
+
+<xs:element name="nyilvantartas" type="nyilvantartas_t">
+    <xs:key name="kulcsBiciklis">
+        <xs:selector xpath="biciklisek/biciklis"></xs:selector>
+        <xs:field xpath="@biciklisId"></xs:field>
+    </xs:key>
+    <xs:key name="kulcsUtvonal">
+        <xs:selector xpath="utvonalak/utvonal"></xs:selector>
+        <xs:field xpath="@utId"></xs:field>
+    </xs:key>
+    <xs:keyref refer="kulcsBiciklis" name="idegen1">
+        <xs:selector xpath="utvonalak/utvonal"></xs:selector>
+        <xs:field xpath="@sportolo"></xs:field>
+    </xs:keyref>
+    <xs:keyref refer="kulcsBiciklis" name="idegen2">
+        <xs:selector xpath="kerekparok/kerekpar"></xs:selector>
+        <xs:field xpath="@tulaj"></xs:field>
+    </xs:keyref>
+</xs:element>
+</xs:schema>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<register xmlns:ns2="objects.Register">
+    <bicycleList>
+        <bicycle>
+            <brake>disc</brake>
+            <type>city</type>
+            <wheelSize>26</wheelSize>
+        </bicycle>
+        <bicycle>
+            <brake>v</brake>
+            <type>bmx</type>
+            <wheelSize>26</wheelSize>
+        </bicycle>
+        <bicycle>
+            <brake>v</brake>
+            <type>sajat</type>
+            <wheelSize>28</wheelSize>
+        </bicycle>
+    </bicycleList>
+    <cyclistList>
+        <cyclist>
+            <age>21</age>
+            <city>Miskolc</city>
+            <firstName>Dorina</firstName>
+            <lastName>Pelda</lastName>
+        </cyclist>
+        <cyclist>
+            <age>23</age>
+            <city>Miskolc</city>
+            <firstName>Bence</firstName>
+            <lastName>Pelda</lastName>
+        </cyclist>
+    </cyclistList>
+    <routeList>
+        <route>
+            <distance>10.0</distance>
+            <hours>0.5</hours>
+            <info>Just a little cycling</info>
+        </route>
+        <route>
+            <distance>20.0</distance>
+            <hours>2.0</hours>
+            <info>It was long</info>
+            <info>And I am tired</info>
+        </route>
+    </routeList>
+</register>
