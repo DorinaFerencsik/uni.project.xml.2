@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<register xmlns:ns2="objects.Register">
+<database xmlns:ns2="objects.Database">
     <bicycleList>
         <bicycle>
             <brake>disc</brake>
@@ -44,4 +44,4 @@
             <info>And I am tired</info>
         </route>
     </routeList>
-</register>
+</database>
