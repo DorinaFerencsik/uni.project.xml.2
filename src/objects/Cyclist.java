@@ -2,7 +2,7 @@ package objects;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement(namespace = "objects.Register")
+@XmlRootElement(namespace = "objects.Database")
 public class Cyclist {
     private String firstName;
     private String lastName;

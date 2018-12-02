@@ -10,12 +10,12 @@ import javax.xml.bind.annotation.XmlType;
 @XmlRootElement
 @XmlType(propOrder = {"bicycles", "cyclists", "routes"})
 
-public class Register {
+public class Database {
     private ArrayList<Bicycle> bicycles;
     private ArrayList<Cyclist> cyclists;
     private ArrayList<Route> routes;
 
-    public Register() {
+    public Database() {
 
     }
 

@@ -19,12 +19,12 @@ public class Main {
     public static void main(String[] args) {
         String menuOption = "start";
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        Register register = readFromXmlFile();
+        Database database = readFromXmlFile();
 
         while (!menuOption.equals("exit")) {
             try {
                 System.out.println("Select option:");
-                System.out.println("1 - show the Register");
+                System.out.println("1 - show the Database");
                 System.out.println("2 - add Bicycles");
                 System.out.println("3 - add Cyclists");
                 System.out.println("4 - add Routes");
@@ -37,79 +37,70 @@ public class Main {
             System.out.println("You selected: "+menuOption);
             switch (menuOption) {
                 case "1" : {
-                    writeToConsole(register);
+                    writeToConsole(database);
                     System.out.println("---------DONE---------\n");
                     break;
                 }
                 case "2" : {
-                    register = addNewBicycle(register);
+                    database = addNewBicycle(database);
                     System.out.println("---------DONE---------\n");
                     break;
                 }
                 case "3" : {
-                    register = addNewCyclist(register);
+                    database = addNewCyclist(database);
                     System.out.println("---------DONE---------\n");
                     break;
                 }
                 case "4" : {
-                    register = addNewRoute(register);
+                    database = addNewRoute(database);
                     System.out.println("---------DONE---------\n");
                     break;
                 }
                 case "5" : {
-                    writeToXmlFile(register);
+                    writeToXmlFile(database);
                     System.out.println("---------DONE---------\n");
                     break;
                 }
             }
         }
-
-
-//        Register register = readFromXmlFile();
-//        writeToConsole(register);
-//
-//        System.out.println("Add route");
-//        register = addNewRoute(register);
-//        printRoutes(register.getRoutes());
-
     }
     /* READ */
-    public static Register readFromXmlFile() {
-        Register register = new Register();
+    public static Database readFromXmlFile() {
+        Database database = new Database();
         try {
-            JAXBContext jaxbContext = JAXBContext.newInstance(Register.class);
+            JAXBContext jaxbContext = JAXBContext.newInstance(Database.class);
 
             Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
 
             File XMLFile = new File("xml/cyclingRecord.xml");
 
-            register = (Register) jaxbUnmarshaller.unmarshal(XMLFile);
+            database = (Database) jaxbUnmarshaller.unmarshal(XMLFile);
         } catch (JAXBException e) {
             e.printStackTrace();
         }
-        return register;
+        return database;
     }
     /* WRITE */
-    public static void writeToXmlFile(Register register) {
+    public static void writeToXmlFile(Database database) {
         try {
-            JAXBContext jaxbContext = JAXBContext.newInstance(Register.class);
+            JAXBContext jaxbContext = JAXBContext.newInstance(Database.class);
             Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
 
             jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
 
             File XMLFile = new File("xml/cyclingRecord.xml");
 
-            jaxbMarshaller.marshal(register, XMLFile);
-            jaxbMarshaller.marshal(register, System.out);
+            jaxbMarshaller.marshal(database, XMLFile);
+            jaxbMarshaller.marshal(database, System.out);
         } catch (JAXBException e) {
             e.printStackTrace();
         }
     }
     /* PRINT */
-    public static void writeToConsole(Register register) {
-        ArrayList<Bicycle> bicycles = register.getBicycles();
-        ArrayList<Cyclist> cyclists = register.getCyclists();
-        ArrayList<Route> routes = register.getRoutes();
+    public static void writeToConsole(Database database) {
+        ArrayList<Bicycle> bicycles = database.getBicycles();
+        ArrayList<Cyclist> cyclists = database.getCyclists();
+        ArrayList<Route> routes = database.getRoutes();
 
         printBicycles(bicycles);
         printCyclists(cyclists);
@@ -149,7 +140,7 @@ public class Main {
     }
 
     /* ADD */
-    public static Register addNewBicycle(Register register) {
+    public static Database addNewBicycle(Database database) {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         String type = "Basic type";
         String wheelSize = "0";
@@ -174,10 +165,10 @@ public class Main {
             wheelSizeGood = 0;
         }
         Bicycle bicycle = new Bicycle(type, wheelSizeGood, brake);
-        register.addBicycle(bicycle);
-        return register;
+        database.addBicycle(bicycle);
+        return database;
     }
-    public static Register addNewCyclist(Register register) {
+    public static Database addNewCyclist(Database database) {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         String firstName = "First";
         String lastName = "Last";
@@ -205,10 +196,10 @@ public class Main {
             ageGood = 0;
         }
         Cyclist cyclist = new Cyclist(firstName, lastName, ageGood, city);
-        register.addCyclist(cyclist);
-        return register;
+        database.addCyclist(cyclist);
+        return database;
     }
-    public static Register addNewRoute(Register register) {
+    public static Database addNewRoute(Database database) {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         String distance = "0";
         String hours = "0";
@@ -231,20 +222,14 @@ public class Main {
             distanceGood = Double.parseDouble(distance);
             hoursGood = Double.parseDouble(hours);
         }catch(NumberFormatException nfe){
-            System.err.println("Invalid Format!");
+            System.err.println("Cannot parse distance / hours to double. Using default values...");
             distanceGood = 0.0;
             hoursGood = 0.0;
         }
         ArrayList<String> infoList = new ArrayList<>();
         infoList.add(info);
         Route route = new Route(distanceGood, hoursGood, infoList);
-        register.addRoutes(route);
-        return register;
+        database.addRoutes(route);
+        return database;
     }
-
-    /* CHANGE*/
-
-
-
-
 }

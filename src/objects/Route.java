@@ -5,7 +5,7 @@ import java.sql.RowId;
 import java.sql.Time;
 import java.util.ArrayList;
 
-@XmlRootElement(namespace = "objects.Register")
+@XmlRootElement(namespace = "objects.Database")
 public class Route {
     private double distance;
     private double hours;
